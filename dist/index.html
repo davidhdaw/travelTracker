@@ -1,14 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>Travel Tracker</title>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webpack Starter Kit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:ital,wght@0,100;0,200;1,100;1,200&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">
 </head>
 <body>
-  <img src="./images/turing-logo.png" alt="turing logo">
-  
+  <header><h1>TRAVEL TRACKER</h1></header>
+  <nav><p>Sort sort sort plan a trip</p></nav>
+  <section class="vital-info">
+    <article class='next-vacation-countdown'>
+      <h2>Your Vacation Dream Starts In:</h2>
+      <p class="vacation-timer">44 days</p>
+    </article>
+    <article class='next-trip'>
+      <img src="" alt="">
+      <h2>Upcoming Trip</h2>
+      <p>trip info</p>
+      <p>trip info</p>
+      <p>trip info</p>
+    </article>
+  </section>
+
+  <section class='old-vacations'>
+    <article class="most-recent-trip">
+      <img>
+      <h3>Most Recent Trip Location</h3>
+      <p>trip info</p>
+      <p>trip info</p>
+      <p>trip info</p>
+    </article>
+    <article class='filtered Trips'>
+    </article>
+  </section>
+
+
   <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
   <script src="bundle.js"></script>
 
