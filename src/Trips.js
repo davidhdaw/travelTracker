@@ -1,6 +1,6 @@
 class Trips {
   constructor(tripsData) {
-    this.trips = tripsData;
+    this.trips = tripsData.trips;
   };
 
   findUserTrips(userID) {
