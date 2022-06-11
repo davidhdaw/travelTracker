@@ -1,11 +1,33 @@
-// This is the JavaScript entry file - your code begins here
-// Do not delete or rename this file ********
-
-// An example of how you tell webpack to use a CSS (SCSS) file
 import './css/styles.css';
-
-// An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/turing-logo.png'
+import { allData } from './api-calls.js';
+import Destinations from './Destinations';
+import Trips from './Trips';
 
+let travelersData = []
+let tripsData = []
+let destinationsData = []
+window.addEventListener('load', loadData);
 
-console.log('This is the JavaScript entry file - your code begins here.');
+function loadData() {
+  allData.then(data => {
+    travelersData = data[0];
+
+    tripsData = data[1];
+    destinationsData = data[2];
+    console.log(printTripInfoToPage())
+  }).catch(error => console.log(error))
+};
+
+function selectRandomUser(travelers) {
+  const randomIndex = Math.floor(Math.random() * travelers.travelers.length)
+  return travelers.travelers[randomIndex]
+}
+
+function printTripInfoToPage() {
+
+  let randomUser = selectRandomUser(travelersData);
+  console.log(randomUser);
+  let tripsRepo = new Trips(tripsData);
+  return tripsRepo.findUserTrips(randomUser.id)
+}
