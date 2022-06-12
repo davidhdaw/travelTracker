@@ -26,4 +26,9 @@ describe('Destinations', () => {
     expect(destinationsRepo.findTripCost(4,4,4)).to.equal(2440);
   });
 
+  it('should create an image tag with the source and alt text of a destination', function () {
+    expect(destinationsRepo.makeImg(3)).to.equal(`<img src="https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80" alt="opera house and city buildings on the water with boats">`);
+    expect(destinationsRepo.makeImg(4)).to.equal(`<img src="https://images.unsplash.com/photo-1558029697-a7ed1a4b94c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80" alt="boats at a dock during the day time">`);
+  });
+
 });
