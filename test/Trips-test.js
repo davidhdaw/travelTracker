@@ -17,17 +17,34 @@ describe('Trips', () => {
   });
 
   it('Should be able to find all vacations for a given user.', function () {
-    expect(tripsRepo.findUserTrips(44)).to.deep.equal([{"id":181,"userID":44,"destinationID":23,"travelers":4,"date":"2019/11/29","duration":7,"status":"approved","suggestedActivities":[]},{"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"approved","suggestedActivities":[]},{"id":187,"userID":44,"destinationID":11,"travelers":3,"date":"2022/11/12","duration":18,"status":"approved","suggestedActivities":[]}]);
+    expect(tripsRepo.findUserTrips(44)).to.deep.equal([{"id":181,"userID":44,"destinationID":23,"travelers":4,"date":"2019/11/29","duration":7,"status":"approved","suggestedActivities":[]},{"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"pending","suggestedActivities":[]},{"id":187,"userID":44,"destinationID":11,"travelers":3,"date":"2022/11/12","duration":18,"status":"approved","suggestedActivities":[]}]);
   });
 
   it('Should be able to find the next trip for a given user from a date', function () {
     expect(tripsRepo.findNextTrip(44, "2022/06/10")).to.deep.equal({"id":187,"userID":44,"destinationID":11,"travelers":3,"date":"2022/11/12","duration":18,"status":"approved","suggestedActivities":[]});
-    expect(tripsRepo.findNextTrip(44, "2020/01/21")).to.deep.equal({"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"approved","suggestedActivities":[]});
+    expect(tripsRepo.findNextTrip(44, "2020/01/21")).to.deep.equal({"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"pending","suggestedActivities":[]});
   });
 
   it('Should be able to find the most recent trip for a given user from a date', function () {
-    expect(tripsRepo.findLastTrip(44, "2022/06/10")).to.deep.equal({"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"approved","suggestedActivities":[]});
+    expect(tripsRepo.findLastTrip(44, "2022/06/10")).to.deep.equal({"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"pending","suggestedActivities":[]});
     expect(tripsRepo.findLastTrip(44, "2020/01/21")).to.deep.equal({"id":181,"userID":44,"destinationID":23,"travelers":4,"date":"2019/11/29","duration":7,"status":"approved","suggestedActivities":[]});
   });
+
+  it('should find all pending trips', function() {
+    expect(tripsRepo.findPendingTrips(44)).to.deep.equal([{"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"pending","suggestedActivities":[]}]);
+  });
+
+
+  it('should find all future trips from a date', function() {
+    expect(tripsRepo.findFutureTrips(44, "2019/11/28")).to.deep.equal([{"id":181,"userID":44,"destinationID":23,"travelers":4,"date":"2019/11/29","duration":7,"status":"approved","suggestedActivities":[]},{"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"pending","suggestedActivities":[]},{"id":187,"userID":44,"destinationID":11,"travelers":3,"date":"2022/11/12","duration":18,"status":"approved","suggestedActivities":[]}]);
+    expect(tripsRepo.findFutureTrips(44, "2020/03/28")).to.deep.equal([{"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"pending","suggestedActivities":[]},{"id":187,"userID":44,"destinationID":11,"travelers":3,"date":"2022/11/12","duration":18,"status":"approved","suggestedActivities":[]}]);
+  });
+
+  it('should find all past trips from a date', function() {
+    expect(tripsRepo.findPastTrips(44, "2022/11/28")).to.deep.equal([{"id":181,"userID":44,"destinationID":23,"travelers":4,"date":"2019/11/29","duration":7,"status":"approved","suggestedActivities":[]},{"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"pending","suggestedActivities":[]},{"id":187,"userID":44,"destinationID":11,"travelers":3,"date":"2022/11/12","duration":18,"status":"approved","suggestedActivities":[]}]);
+    expect(tripsRepo.findPastTrips(44, "2022/01/28")).to.deep.equal([{"id":181,"userID":44,"destinationID":23,"travelers":4,"date":"2019/11/29","duration":7,"status":"approved","suggestedActivities":[]},{"id":183,"userID":44,"destinationID":10,"travelers":4,"date":"2020/07/22","duration":5,"status":"pending","suggestedActivities":[]}]);
+});
+
+  // it('should find all past trips')
 
 });
