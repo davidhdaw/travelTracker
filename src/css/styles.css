@@ -21,10 +21,17 @@ h1, h2, h3, h4 {
 }
 
 header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: #646E68;
   margin: 0px;
   margin-block-start: 0px;
   padding: 3px 20px;
+}
+
+.total-spent {
+  font-size: 16pt
 }
 
 nav {
@@ -35,13 +42,13 @@ nav {
 .vital-info {
   display: flex;
   border-bottom: 2px solid black;
-  padding: 45px 20px;
+  padding: 25px 20px;
   align-items: center;
 }
 
 .next-vacation-countdown {
   width: 190px;
-  height: 170px;
+  height: 200px;
   background-color: white;
   text-align: center;
   padding: 10px 25px 50px;
@@ -52,12 +59,12 @@ nav {
 }
 
 .vacation-timer {
-  font-size: 36pt;
-  margin-block-start: .5em
+  font-size: 30pt;
+  margin-block-start: .25em
 }
 
 .next-trip {
-  width: 800px;
+
   height: 215px;
   background-color: white;
   border: 6px solid #646E68;
@@ -65,11 +72,12 @@ nav {
   filter: drop-shadow(2px 2px 3px black);
 }
 
-.most-recent-trip {
+.hero-trip {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   height: 200px;
+  width: 800px;
   align-content: flex-start;
   justify-content: flex-start;
   background-color: white;
@@ -78,10 +86,16 @@ nav {
   filter: drop-shadow(2px 2px 3px black);
   margin: 10px 20px;
   text-align: left;
-
 }
 
-.most-recent-trip img {
+.filter-error {
+  width: 100%;
+  text-align: center;
+  margin-top: 70px;
+  font-size: 48px;
+}
+
+.hero-trip img {
   height: 200px;
   width: 300px;
   margin-right: 10px;
