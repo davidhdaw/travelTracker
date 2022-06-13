@@ -8,9 +8,15 @@ let totalSpent = document.querySelector('.total-spent')
 let recentTrip = document.querySelector('.most-recent-trip')
 let filteredTrips = document.querySelector('.filtered-trips')
 let heroTrip = document.querySelector('.hero-trip')
+let tripForm = document.querySelector('.new-trip-form')
+let blockBackground = document.querySelector('.block-background')
+let destinationSelector = document.querySelector('#destination')
+let cancelBtn = document.querySelector('.cancel-button')
 let futureTripBtn = document.querySelector('.future-trips')
 let pastTripBtn = document.querySelector('.past-trips')
 let pendingTripBtn = document.querySelector('.pending-trips')
+let planTripBtn = document.querySelector('.trip-planner')
+
 
 let travelersData = []
 let tripsData = []
@@ -21,6 +27,8 @@ window.addEventListener('load', loadData);
 futureTripBtn.addEventListener('click', futureTripLayout);
 pastTripBtn.addEventListener('click', pastTripLayout);
 pendingTripBtn.addEventListener('click', pendingTripLayout);
+cancelBtn.addEventListener('click', toggleVacationForm);
+planTripBtn.addEventListener('click', toggleVacationForm);
 
 function loadData() {
   allData.then(data => {
@@ -29,6 +37,7 @@ function loadData() {
     destinationsData = data[2];
     currentUser = selectRandomUser(travelersData);
     totalSpent.innerHTML = `${findYearCost()} dollars spent on trips this year`
+    populateSelector();
     printHeroTrip('last');
     printPastTrips();
   }).catch(error => console.log(error))
@@ -120,6 +129,14 @@ function findYearCost() {
   return Math.floor(spentThisYear * 1.1)
 }
 
+function populateSelector() {
+  let destinationsRepo = new Destinations(destinationsData);
+  destinationSelector.innerHTML = ''
+  destinationsRepo.destinations.forEach(destination => {
+    destinationSelector.innerHTML += `<option value='${destination.id}'>${destination.destination}</option>`
+  })
+}
+
 function futureTripLayout() {
   printHeroTrip('next');
   printFutureTrips();
@@ -133,4 +150,9 @@ function pastTripLayout() {
 function pendingTripLayout() {
   printHeroTrip('pending');
   printPendingTrips();
+}
+
+function toggleVacationForm() {
+  tripForm.classList.toggle('hidden')
+  blockBackground.classList.toggle('hidden')
 }
