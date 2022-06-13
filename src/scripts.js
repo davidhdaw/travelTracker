@@ -1,6 +1,10 @@
 import './css/styles.css';
-import './images/turing-logo.png'
-import { allData } from './api-calls.js';
+import './images/turing-logo.png';
+import {
+  allData,
+  postUserCall,
+  checkForError
+} from './api-calls.js';
 import Destinations from './Destinations';
 import Trips from './Trips';
 
@@ -11,12 +15,19 @@ let heroTrip = document.querySelector('.hero-trip')
 let tripForm = document.querySelector('.new-trip-form')
 let blockBackground = document.querySelector('.block-background')
 let destinationSelector = document.querySelector('#destination')
+let calendarData = document.querySelector('#calendarData')
+let numTravelers = document.querySelector('#numTravelers')
+let tripLength = document.querySelector('#tripLength')
+let destinationSelection = document.querySelector('#destination')
+
 let cancelBtn = document.querySelector('.cancel-button')
 let futureTripBtn = document.querySelector('.future-trips')
 let pastTripBtn = document.querySelector('.past-trips')
 let pendingTripBtn = document.querySelector('.pending-trips')
 let planTripBtn = document.querySelector('.trip-planner')
-
+let errorMessage = document.querySelector('.error-handling')
+let submitVacationBtn = document.querySelector('#submitVacation')
+console.log(submitVacationBtn);
 
 let travelersData = []
 let tripsData = []
@@ -29,6 +40,7 @@ pastTripBtn.addEventListener('click', pastTripLayout);
 pendingTripBtn.addEventListener('click', pendingTripLayout);
 cancelBtn.addEventListener('click', toggleVacationForm);
 planTripBtn.addEventListener('click', toggleVacationForm);
+submitVacationBtn.addEventListener('click', submitVacationForm);
 
 function loadData() {
   allData.then(data => {
@@ -40,6 +52,16 @@ function loadData() {
     populateSelector();
     printHeroTrip('last');
     printPastTrips();
+  }).catch(error => console.log(error))
+};
+
+function reloadToPending() {
+  allData.then(data => {
+    travelersData = data[0];
+    tripsData = data[1];
+    destinationsData = data[2];
+    totalSpent.innerHTML = `${findYearCost()} dollars spent on trips this year`;
+    pendingTripLayout();
   }).catch(error => console.log(error))
 };
 
@@ -135,6 +157,18 @@ function populateSelector() {
   destinationsRepo.destinations.forEach(destination => {
     destinationSelector.innerHTML += `<option value='${destination.id}'>${destination.destination}</option>`
   })
+};
+
+function submitVacationForm() {
+  event.preventDefault();
+  console.log(calendarData.value);
+
+  if(calendarData.value === '' || numTravelers.value === '' || tripLength.value === '' || destination.value === '') {
+    errorMessage.classList.remove('hidden');
+  }
+  let tripObj = {id: Date.now(), userID: currentUser.id, destinationID: parseInt(destination.value), travelers: parseInt(numTravelers.value), date: reformatDate(calendarData.value), duration: parseInt(tripLength.value), status: 'pending', suggestedActivities:[]};
+  console.log(tripObj)
+  postUserCall(tripObj, 'trips').then(response => reloadToPending())
 }
 
 function futureTripLayout() {
@@ -155,4 +189,8 @@ function pendingTripLayout() {
 function toggleVacationForm() {
   tripForm.classList.toggle('hidden')
   blockBackground.classList.toggle('hidden')
+}
+
+function reformatDate(date) {
+  return date.split('-').join('/');
 }

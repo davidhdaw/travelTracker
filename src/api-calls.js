@@ -13,12 +13,12 @@ const postUserCall = (postObject, dataType) => {
     	'Content-Type': 'application/json'
     }
   })
-  .then(response => checkForError(response))
+  // .then(response => checkForError(response))
   .then(response => {
   response.json()
   allData = Promise.all([getPromise('travelers'), getPromise('trips'), getPromise('destinations')]);
 })
-  .catch(error => error)
+  .catch(error => console.log(error))
 };
 
 const checkForError = (response) => {
