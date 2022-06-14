@@ -101,6 +101,18 @@ nav {
   margin-right: 10px;
 }
 
+.cancel-button {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  border: 1px solid black;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  margin: 0px;
+  padding: 0px;
+
+}
+
 .filtered-trips div {
   display: flex;
   align-items: center;
@@ -123,4 +135,36 @@ nav {
   font-size: 18px;
   margin-left: 15px;
   margin: .15em
+}
+
+.block-background {
+  background-color: black;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  opacity: .4;
+}
+
+.new-trip-form {
+  padding: 30px 15px;
+  background-color: white;
+  border: 6px solid #646E68;
+  border-radius: 8px;
+  filter: drop-shadow(2px 2px 3px black);
+  z-index: 3;
+  opacity: 1;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  left:50%;
+  margin-left:-150px;
+  top: 50%;
+  margin-top:-300px;
+}
+
+.hidden {
+  display: none!important;
 }
