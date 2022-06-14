@@ -27,7 +27,6 @@ let pendingTripBtn = document.querySelector('.pending-trips')
 let planTripBtn = document.querySelector('.trip-planner')
 let errorMessage = document.querySelector('.error-handling')
 let submitVacationBtn = document.querySelector('#submitVacation')
-console.log(submitVacationBtn);
 
 let travelersData = []
 let tripsData = []
@@ -39,8 +38,25 @@ futureTripBtn.addEventListener('click', futureTripLayout);
 pastTripBtn.addEventListener('click', pastTripLayout);
 pendingTripBtn.addEventListener('click', pendingTripLayout);
 cancelBtn.addEventListener('click', toggleVacationForm);
+cancelBtn.addEventListener('keydown', shiftTabFocus);
 planTripBtn.addEventListener('click', toggleVacationForm);
 submitVacationBtn.addEventListener('click', submitVacationForm);
+submitVacationBtn.addEventListener('keydown', tabFocus);
+
+function tabFocus(e) {
+  if (e.key === 'Tab' || e.keyCode === KEYCODE_TAB) {
+    cancelBtn.focus()
+    e.preventDefault();
+  }
+};
+
+function shiftTabFocus(e) {
+  if ((e.key === 'Tab' || e.keyCode === KEYCODE_TAB) && e.shiftKey) {
+    submitVacationBtn.focus()
+    e.preventDefault();
+  }
+};
+
 
 function loadData() {
   allData.then(data => {
@@ -112,7 +128,7 @@ function printPastTrips() {
   filteredTrips.innerHTML = ``
   pastTrips.forEach(trip => {
     let destination = destinationsRepo.findDestination(trip.destinationID);
-    filteredTrips.innerHTML += `<div id="${trip.id}"><h4>${destination.destination}<h4><p>${trip.date}</p></div>`;
+    filteredTrips.innerHTML += `<div id="${trip.id}"><h3>${destination.destination}<h3><p>${trip.date}</p></div>`;
   });
 };
 
@@ -136,7 +152,7 @@ function printPendingTrips() {
   filteredTrips.innerHTML = ``
   pendingTrips.forEach(trip => {
     let destination = destinationsRepo.findDestination(trip.destinationID);
-    filteredTrips.innerHTML += `<div id="${trip.id}"><h4>${destination.destination}<h4><p>${trip.date}</p></div>`;
+    filteredTrips.innerHTML += `<div id="${trip.id}"><h3>${destination.destination}<h3><p>${trip.date}</p></div>`;
   });
 };
 
