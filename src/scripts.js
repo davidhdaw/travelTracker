@@ -38,8 +38,25 @@ futureTripBtn.addEventListener('click', futureTripLayout);
 pastTripBtn.addEventListener('click', pastTripLayout);
 pendingTripBtn.addEventListener('click', pendingTripLayout);
 cancelBtn.addEventListener('click', toggleVacationForm);
+cancelBtn.addEventListener('keydown', shiftTabFocus);
 planTripBtn.addEventListener('click', toggleVacationForm);
 submitVacationBtn.addEventListener('click', submitVacationForm);
+submitVacationBtn.addEventListener('keydown', tabFocus);
+
+function tabFocus(e) {
+  if (e.key === 'Tab' || e.keyCode === KEYCODE_TAB) {
+    cancelBtn.focus()
+    e.preventDefault();
+  }
+};
+
+function shiftTabFocus(e) {
+  if ((e.key === 'Tab' || e.keyCode === KEYCODE_TAB) && e.shiftKey) {
+    submitVacationBtn.focus()
+    e.preventDefault();
+  }
+};
+
 
 function loadData() {
   allData.then(data => {
