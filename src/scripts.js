@@ -168,10 +168,14 @@ function printVacationCountdown(type) {
     <h2>Wouldn't you like to plan another?</h2>`
   } else if (type ==='next') {
     let thisTrip = tripsRepo.findNextTrip(currentUser.id, dayjs().format('YYYY/MM/DD'))
-    vacationCountdown.innerHTML = `<h2>Your Next Vacation Starts in</h2>
-    <p class="vacation-timer">${dayjs(thisTrip.date).diff(dayjs(), 'day')}</p>
-    <h2>days</h2>
-    <h2>Get Excited!</h2>`
+    if (thisTrip === undefined) {
+      vacationCountdown.innerHTML = `<h2>No upcoming vacations.</h2><h2>Plan a new one to get away for a while.</h2>`
+    } else {
+      vacationCountdown.innerHTML = `<h2>Your Next Vacation Starts in</h2>
+      <p class="vacation-timer">${dayjs(thisTrip.date).diff(dayjs(), 'day')}</p>
+      <h2>days</h2>
+      <h2>Get Excited!</h2>`
+    }
   } else if (type === 'pending') {
     vacationCountdown.innerHTML = `<h2>We'll approve your new vacation(s) soon!</h2>`
   }
