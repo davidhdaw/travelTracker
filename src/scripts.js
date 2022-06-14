@@ -133,7 +133,7 @@ function printHeroTrip(trip) {
       heroTrip.innerHTML += `<p>for ${thisTrip.duration} days</p>`
     }
     if (trip === 'pending') {
-      heroTrip.innerHTML += `<p>Trip Status: Pending</p><h2>total cost: ${destinationsRepo.findTripCost(thisTrip.destinationID, thisTrip.travelers, thisTrip.duration)}</h2>`
+      heroTrip.innerHTML += `<p>Trip Status: Pending</p><h2>total cost: ${Math.floor(destinationsRepo.findTripCost(thisTrip.destinationID, thisTrip.travelers, thisTrip.duration)* 1.1)}</h2>`
     }
   }
 };
@@ -248,7 +248,7 @@ function submitVacationForm() {
     dateErrorMessage.classList.remove('hidden')
     return console.log('trip duration invalid')
   }
-  let tripObj = {id: Date.now(), userID: currentUser.id, destinationID: parseInt(destination.value), travelers: parseInt(numTravelers.value), date: reformatDate(calendarData.value), duration: (tripDuration+1), status: 'pending', suggestedActivities:[]}
+  let tripObj = {id: Date.now(), userID: currentUser.id, destinationID: parseInt(destination.value), travelers: parseInt(numTravelers.value), date: reformatDate(calendarData.value), duration: (tripDuration), status: 'pending', suggestedActivities:[]}
   console.log(tripObj)
   postUserCall(tripObj, 'trips').then(response => reloadToPending())
 }
