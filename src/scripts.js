@@ -27,7 +27,6 @@ let pendingTripBtn = document.querySelector('.pending-trips')
 let planTripBtn = document.querySelector('.trip-planner')
 let errorMessage = document.querySelector('.error-handling')
 let submitVacationBtn = document.querySelector('#submitVacation')
-console.log(submitVacationBtn);
 
 let travelersData = []
 let tripsData = []
@@ -112,7 +111,7 @@ function printPastTrips() {
   filteredTrips.innerHTML = ``
   pastTrips.forEach(trip => {
     let destination = destinationsRepo.findDestination(trip.destinationID);
-    filteredTrips.innerHTML += `<div id="${trip.id}"><h4>${destination.destination}<h4><p>${trip.date}</p></div>`;
+    filteredTrips.innerHTML += `<div id="${trip.id}"><h3>${destination.destination}<h3><p>${trip.date}</p></div>`;
   });
 };
 
@@ -136,7 +135,7 @@ function printPendingTrips() {
   filteredTrips.innerHTML = ``
   pendingTrips.forEach(trip => {
     let destination = destinationsRepo.findDestination(trip.destinationID);
-    filteredTrips.innerHTML += `<div id="${trip.id}"><h4>${destination.destination}<h4><p>${trip.date}</p></div>`;
+    filteredTrips.innerHTML += `<div id="${trip.id}"><h3>${destination.destination}<h3><p>${trip.date}</p></div>`;
   });
 };
 

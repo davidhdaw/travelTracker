@@ -9,7 +9,7 @@ p {
 }
 
 h1 {
-  color: #E98A15;
+  color: #ffffff;
   font-size: 24pt;
   margin-block-start: 0px;
   margin-block-end: 0px;
@@ -124,7 +124,7 @@ nav {
   text-align: left;
 }
 
-.filtered-trips h4 {
+.filtered-trips h3 {
   margin-block-start: 0px;
   margin-block-end: 0px;
   font-size: 20px;
