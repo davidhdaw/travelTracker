@@ -89,6 +89,7 @@ nav {
 }
 
 .filter-error {
+  color: black;
   width: 100%;
   text-align: center;
   margin-top: 70px;
@@ -155,6 +156,34 @@ nav {
   border-radius: 8px;
   filter: drop-shadow(2px 2px 3px black);
   z-index: 3;
+  opacity: 1;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  left:50%;
+  margin-left:-150px;
+  top: 50%;
+  margin-top:-300px;
+}
+
+.block-background-login {
+  background-color: #D7D9D7;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 4;
+  opacity: 1;
+}
+
+.login-form {
+  padding: 30px 15px;
+  background-color: white;
+  border: 6px solid #646E68;
+  border-radius: 8px;
+  filter: drop-shadow(2px 2px 3px black);
+  z-index: 5;
   opacity: 1;
   width: 300px;
   height: 300px;
