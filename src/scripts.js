@@ -1,6 +1,7 @@
 import './css/styles.css';
 import './images/turing-logo.png';
 import {
+  getUser,
   allData,
   postUserCall,
   checkForError
@@ -19,6 +20,13 @@ let calendarData = document.querySelector('#calendarData')
 let numTravelers = document.querySelector('#numTravelers')
 let tripLength = document.querySelector('#tripLength')
 let destinationSelection = document.querySelector('#destination')
+let userName = document.querySelector('#userName')
+let password = document.querySelector('#password')
+let loginError = document.querySelector('.login-error')
+let passwordError = document.querySelector('.password-error')
+let userNameError = document.querySelector('.userName-error')
+let blockBackgroundLogin = document.querySelector('.block-background-login')
+let loginForm = document.querySelector('.login-form')
 
 let cancelBtn = document.querySelector('.cancel-button')
 let futureTripBtn = document.querySelector('.future-trips')
@@ -27,6 +35,7 @@ let pendingTripBtn = document.querySelector('.pending-trips')
 let planTripBtn = document.querySelector('.trip-planner')
 let errorMessage = document.querySelector('.error-handling')
 let submitVacationBtn = document.querySelector('#submitVacation')
+let submitLoginBtn = document.querySelector('#submitLogin')
 
 let travelersData = []
 let tripsData = []
@@ -40,6 +49,7 @@ pendingTripBtn.addEventListener('click', pendingTripLayout);
 cancelBtn.addEventListener('click', toggleVacationForm);
 cancelBtn.addEventListener('keydown', shiftTabFocus);
 planTripBtn.addEventListener('click', toggleVacationForm);
+submitLoginBtn.addEventListener('click', loginCheck);
 submitVacationBtn.addEventListener('click', submitVacationForm);
 submitVacationBtn.addEventListener('keydown', tabFocus);
 
@@ -63,11 +73,7 @@ function loadData() {
     travelersData = data[0];
     tripsData = data[1];
     destinationsData = data[2];
-    currentUser = selectRandomUser(travelersData);
-    totalSpent.innerHTML = `${findYearCost()} dollars spent on trips this year`
     populateSelector();
-    printHeroTrip('last');
-    printPastTrips();
   }).catch(error => console.log(error))
 };
 
@@ -77,6 +83,7 @@ function reloadToPending() {
     tripsData = data[1];
     destinationsData = data[2];
     totalSpent.innerHTML = `${findYearCost()} dollars spent on trips this year`;
+    toggleVacationForm();
     pendingTripLayout();
   }).catch(error => console.log(error))
 };
@@ -98,6 +105,7 @@ function printHeroTrip(trip) {
   thisTrip = tripsRepo.findPendingTrips(currentUser.id)[0]
 }
   if (thisTrip === undefined) {
+    console.log('huh?')
     heroTrip.innerHTML = `<h1 class='filter-error'>You have no ${trip} trip</h1>`
   } else {
     let thisDestination = destinationsRepo.findDestination(thisTrip.destinationID)
@@ -175,31 +183,54 @@ function populateSelector() {
   })
 };
 
-function submitVacationForm() {
-  event.preventDefault();
-  console.log(calendarData.value);
-
-  if(calendarData.value === '' || numTravelers.value === '' || tripLength.value === '' || destination.value === '') {
-    errorMessage.classList.remove('hidden');
+function loginCheck() {
+    event.preventDefault();
+    loginError.classList.add('hidden')
+    passwordError.classList.add('hidden')
+    userNameError.classList.add('hidden')
+    let userNameValue = userName.value
+    let userID = userNameValue.split('traveler')
+  if (userName.value === '' || password.value === '') {
+    loginError.classList.remove('hidden')
+  } else if (password.value !== 'travel') {
+    passwordError.classList.remove('hidden')
+  } else {
+    getUser(userID[1]).then(data => {
+      currentUser = data;
+      totalSpent.innerHTML = `${findYearCost()} dollars spent on trips this year`
+      printHeroTrip('last');
+      printPastTrips();
+      toggleLoginForm();
+    }).catch(error => {
+      console.log(error)
+      userNameError.classList.remove('hidden')
+    })
   }
-  let tripObj = {id: Date.now(), userID: currentUser.id, destinationID: parseInt(destination.value), travelers: parseInt(numTravelers.value), date: reformatDate(calendarData.value), duration: parseInt(tripLength.value), status: 'pending', suggestedActivities:[]};
+}
+
+function submitVacationForm() {
+  event.preventDefault()
+  if(calendarData.value === '' || numTravelers.value === '' || tripLength.value === '' || destination.value === '') {
+    errorMessage.classList.remove('hidden')
+  }
+  let tripObj = {id: Date.now(), userID: currentUser.id, destinationID: parseInt(destination.value), travelers: parseInt(numTravelers.value), date: reformatDate(calendarData.value), duration: parseInt(tripLength.value), status: 'pending', suggestedActivities:[]}
   console.log(tripObj)
   postUserCall(tripObj, 'trips').then(response => reloadToPending())
 }
 
 function futureTripLayout() {
-  printHeroTrip('next');
-  printFutureTrips();
+  printHeroTrip('next')
+  printFutureTrips()
 }
 
 function pastTripLayout() {
-  printHeroTrip('last');
-  printPastTrips();
+  printHeroTrip('last')
+  printPastTrips()
 }
 
 function pendingTripLayout() {
-  printHeroTrip('pending');
-  printPendingTrips();
+  printHeroTrip('pending')
+  printPendingTrips()
 }
 
 function toggleVacationForm() {
@@ -207,6 +238,11 @@ function toggleVacationForm() {
   blockBackground.classList.toggle('hidden')
 }
 
+function toggleLoginForm() {
+  loginForm.classList.toggle('hidden')
+  blockBackgroundLogin.classList.toggle('hidden')
+}
+
 function reformatDate(date) {
-  return date.split('-').join('/');
+  return date.split('-').join('/')
 }

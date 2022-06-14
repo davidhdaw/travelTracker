@@ -2,6 +2,10 @@ function getPromise(dataType) {
   return fetch(`http://localhost:3001/api/v1/${dataType}`).then(response => response.json())
 }
 
+const getUser = (userID) => {
+  return fetch(`http://localhost:3001/api/v1/travelers/${userID}`)  .then(response => checkForError(response)).then(response => response.json())
+}
+
   //populate all databases
 let allData = Promise.all([getPromise('travelers'), getPromise('trips'), getPromise('destinations')]);
 
@@ -13,7 +17,7 @@ const postUserCall = (postObject, dataType) => {
     	'Content-Type': 'application/json'
     }
   })
-  // .then(response => checkForError(response))
+  .then(response => checkForError(response))
   .then(response => {
   response.json()
   allData = Promise.all([getPromise('travelers'), getPromise('trips'), getPromise('destinations')]);
@@ -31,6 +35,7 @@ const checkForError = (response) => {
 
 
 export {
+getUser,
 allData,
 postUserCall,
 checkForError
