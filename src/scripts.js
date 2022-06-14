@@ -12,8 +12,6 @@ const dayjs = require('dayjs')
 let RelativeTime = require('dayjs/plugin/RelativeTime')
 dayjs.extend(RelativeTime)
 
-console.log(dayjs().diff('2022/03/01', 'day'))
-
 let totalSpent = document.querySelector('.total-spent')
 let tripsType = document.querySelector('.trips-type')
 let vacationCountdown = document.querySelector('.vacation-countdown')
@@ -25,7 +23,7 @@ let blockBackground = document.querySelector('.block-background')
 let destinationSelector = document.querySelector('#destination')
 let calendarData = document.querySelector('#calendarData')
 let numTravelers = document.querySelector('#numTravelers')
-let tripLength = document.querySelector('#tripLength')
+let calendarEndData = document.querySelector('#calendarEndData')
 let destinationSelection = document.querySelector('#destination')
 let userName = document.querySelector('#userName')
 let password = document.querySelector('#password')
@@ -34,14 +32,18 @@ let passwordError = document.querySelector('.password-error')
 let userNameError = document.querySelector('.userName-error')
 let blockBackgroundLogin = document.querySelector('.block-background-login')
 let loginForm = document.querySelector('.login-form')
+let userInfo = document.querySelector('.user-info')
 let nav = document.querySelector('nav')
+let errorMessage = document.querySelector('.error-handling')
+let dateErrorMessage = document.querySelector('.date-error-handling')
+
 
 let cancelBtn = document.querySelector('.cancel-button')
 let futureTripBtn = document.querySelector('.future-trips')
 let pastTripBtn = document.querySelector('.past-trips')
 let pendingTripBtn = document.querySelector('.pending-trips')
 let planTripBtn = document.querySelector('.trip-planner')
-let errorMessage = document.querySelector('.error-handling')
+
 let submitVacationBtn = document.querySelector('#submitVacation')
 let submitLoginBtn = document.querySelector('#submitLogin')
 
@@ -109,7 +111,7 @@ function printHeroTrip(trip) {
 } else if (trip === 'next') {
   thisTrip = tripsRepo.findNextTrip(currentUser.id, dayjs().format('YYYY/MM/DD'))
 } else if (trip === 'pending') {
-  thisTrip = tripsRepo.findPendingTrips(currentUser.id)[0]
+  thisTrip = tripsRepo.findPendingTrips(currentUser.id).sort((a,b) => b.id - a.id)[0]
 }
   if (thisTrip === undefined) {
     heroTrip.innerHTML = `<h1 class='filter-error'>You have no ${trip} trip</h1>`
@@ -129,7 +131,10 @@ function printHeroTrip(trip) {
       heroTrip.innerHTML += `<p>for ${thisTrip.duration} day</p>`
     } else {
       heroTrip.innerHTML += `<p>for ${thisTrip.duration} days</p>`
-    };
+    }
+    if (trip === 'pending') {
+      heroTrip.innerHTML += `<p>Trip Status: Pending</p><h2>total cost: ${destinationsRepo.findTripCost(thisTrip.destinationID, thisTrip.travelers, thisTrip.duration)}</h2>`
+    }
   }
 };
 
@@ -175,7 +180,7 @@ function printVacationCountdown(type) {
 function printPendingTrips() {
   let tripsRepo = new Trips(tripsData);
   let destinationsRepo = new Destinations(destinationsData);
-  let pendingTrips = tripsRepo.findPendingTrips(currentUser.id);
+  let pendingTrips = tripsRepo.findPendingTrips(currentUser.id).sort((a,b) => b.id - a.id);
   pendingTrips.shift();
   filteredTrips.innerHTML = ``
   pendingTrips.forEach(trip => printMiniTrip(trip));
@@ -215,6 +220,7 @@ function loginCheck() {
     getUser(userID[1]).then(data => {
       currentUser = data;
       totalSpent.innerHTML = `${findYearCost()} dollars spent on trips this year`
+      userInfo.innerText = `Welcome, ${currentUser.name}`
       pastTripLayout()
       nav.classList.remove('hidden')
       toggleLoginForm();
@@ -227,10 +233,18 @@ function loginCheck() {
 
 function submitVacationForm() {
   event.preventDefault()
-  if(calendarData.value === '' || numTravelers.value === '' || tripLength.value === '' || destination.value === '') {
+  if(calendarData.value === '' || numTravelers.value === '' || calendarEndData.value === '' || destination.value === '') {
     errorMessage.classList.remove('hidden')
+    return console.log('user did not complete all fields')
   }
-  let tripObj = {id: Date.now(), userID: currentUser.id, destinationID: parseInt(destination.value), travelers: parseInt(numTravelers.value), date: reformatDate(calendarData.value), duration: parseInt(tripLength.value), status: 'pending', suggestedActivities:[]}
+  let tripDuration = dayjs(calendarEndData.value).diff(dayjs(calendarData.value), 'days')
+  console.log(tripDuration)
+  console.log(dateErrorMessage)
+  if (tripDuration < 0) {
+    dateErrorMessage.classList.remove('hidden')
+    return console.log('trip duration invalid')
+  }
+  let tripObj = {id: Date.now(), userID: currentUser.id, destinationID: parseInt(destination.value), travelers: parseInt(numTravelers.value), date: reformatDate(calendarData.value), duration: (tripDuration+1), status: 'pending', suggestedActivities:[]}
   console.log(tripObj)
   postUserCall(tripObj, 'trips').then(response => reloadToPending())
 }
