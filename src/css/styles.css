@@ -39,6 +39,13 @@ nav {
   border-bottom: 1px solid black;
 }
 
+.trips-type {
+  color: black;
+  font-size: 36pt;
+  text-align: center;
+  border-bottom: 1px solid black;
+}
+
 .vital-info {
   display: flex;
   border-bottom: 2px solid black;
@@ -46,7 +53,7 @@ nav {
   align-items: center;
 }
 
-.next-vacation-countdown {
+.vacation-countdown {
   width: 190px;
   height: 200px;
   background-color: white;

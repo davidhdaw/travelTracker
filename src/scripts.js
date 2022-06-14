@@ -8,8 +8,15 @@ import {
 } from './api-calls.js';
 import Destinations from './Destinations';
 import Trips from './Trips';
+const dayjs = require('dayjs')
+let RelativeTime = require('dayjs/plugin/RelativeTime')
+dayjs.extend(RelativeTime)
+
+console.log(dayjs().diff('2022/03/01', 'day'))
 
 let totalSpent = document.querySelector('.total-spent')
+let tripsType = document.querySelector('.trips-type')
+let vacationCountdown = document.querySelector('.vacation-countdown')
 let recentTrip = document.querySelector('.most-recent-trip')
 let filteredTrips = document.querySelector('.filtered-trips')
 let heroTrip = document.querySelector('.hero-trip')
@@ -27,6 +34,7 @@ let passwordError = document.querySelector('.password-error')
 let userNameError = document.querySelector('.userName-error')
 let blockBackgroundLogin = document.querySelector('.block-background-login')
 let loginForm = document.querySelector('.login-form')
+let nav = document.querySelector('nav')
 
 let cancelBtn = document.querySelector('.cancel-button')
 let futureTripBtn = document.querySelector('.future-trips')
@@ -56,17 +64,16 @@ submitVacationBtn.addEventListener('keydown', tabFocus);
 function tabFocus(e) {
   if (e.key === 'Tab' || e.keyCode === KEYCODE_TAB) {
     cancelBtn.focus()
-    e.preventDefault();
+    e.preventDefault()
   }
-};
+}
 
 function shiftTabFocus(e) {
   if ((e.key === 'Tab' || e.keyCode === KEYCODE_TAB) && e.shiftKey) {
     submitVacationBtn.focus()
-    e.preventDefault();
+    e.preventDefault()
   }
-};
-
+}
 
 function loadData() {
   allData.then(data => {
@@ -98,14 +105,13 @@ function printHeroTrip(trip) {
   let destinationsRepo = new Destinations(destinationsData);
   let thisTrip;
   if (trip === 'last') {
-  thisTrip = tripsRepo.findLastTrip(currentUser.id, '2022/06/11')
+  thisTrip = tripsRepo.findLastTrip(currentUser.id, dayjs().format('YYYY/MM/DD'))
 } else if (trip === 'next') {
-  thisTrip = tripsRepo.findNextTrip(currentUser.id, '2022/06/11')
+  thisTrip = tripsRepo.findNextTrip(currentUser.id, dayjs().format('YYYY/MM/DD'))
 } else if (trip === 'pending') {
   thisTrip = tripsRepo.findPendingTrips(currentUser.id)[0]
 }
   if (thisTrip === undefined) {
-    console.log('huh?')
     heroTrip.innerHTML = `<h1 class='filter-error'>You have no ${trip} trip</h1>`
   } else {
     let thisDestination = destinationsRepo.findDestination(thisTrip.destinationID)
@@ -130,27 +136,41 @@ function printHeroTrip(trip) {
 function printPastTrips() {
   let tripsRepo = new Trips(tripsData);
   let destinationsRepo = new Destinations(destinationsData);
-  let pastTrips = tripsRepo.findPastTrips(currentUser.id, '2022/06/11')
+  let pastTrips = tripsRepo.findPastTrips(currentUser.id, dayjs().format('YYYY/MM/DD'))
   pastTrips.pop()
   pastTrips.reverse()
   filteredTrips.innerHTML = ``
-  pastTrips.forEach(trip => {
-    let destination = destinationsRepo.findDestination(trip.destinationID);
-    filteredTrips.innerHTML += `<div id="${trip.id}"><h3>${destination.destination}<h3><p>${trip.date}</p></div>`;
-  });
+  pastTrips.forEach(trip => printMiniTrip(trip));
 };
 
 function printFutureTrips() {
   let tripsRepo = new Trips(tripsData);
   let destinationsRepo = new Destinations(destinationsData);
-  let futureTrips = tripsRepo.findFutureTrips(currentUser.id, '2022/06/11');
+  let futureTrips = tripsRepo.findFutureTrips(currentUser.id, dayjs().format('YYYY/MM/DD'));
   futureTrips.shift();
   filteredTrips.innerHTML = ``
-  futureTrips.forEach(trip => {
-    let destination = destinationsRepo.findDestination(trip.destinationID);
-    filteredTrips.innerHTML += `<div id="${trip.id}"><h4>${destination.destination}<h4><p>${trip.date}</p></div>`;
-  });
+  futureTrips.forEach(trip => printMiniTrip(trip));
 };
+
+function printVacationCountdown(type) {
+  let tripsRepo = new Trips(tripsData);
+  let destinationsRepo = new Destinations(destinationsData);
+  if (type ==='last') {
+    let thisTrip = tripsRepo.findLastTrip(currentUser.id, dayjs().format('YYYY/MM/DD'))
+    vacationCountdown.innerHTML = `<h2>Your Last Vacation Was</h2>
+    <p class="vacation-timer">${dayjs().diff(thisTrip.date, 'day')}</p>
+    <h2>days ago</h2>
+    <h2>Wouldn't you like to plan another?</h2>`
+  } else if (type ==='next') {
+    let thisTrip = tripsRepo.findNextTrip(currentUser.id, dayjs().format('YYYY/MM/DD'))
+    vacationCountdown.innerHTML = `<h2>Your Next Vacation Starts in</h2>
+    <p class="vacation-timer">${dayjs(thisTrip.date).diff(dayjs(), 'day')}</p>
+    <h2>days</h2>
+    <h2>Get Excited!</h2>`
+  } else if (type === 'pending') {
+    vacationCountdown.innerHTML = `<h2>We'll approve your new vacation(s) soon!</h2>`
+  }
+}
 
 function printPendingTrips() {
   let tripsRepo = new Trips(tripsData);
@@ -158,10 +178,7 @@ function printPendingTrips() {
   let pendingTrips = tripsRepo.findPendingTrips(currentUser.id);
   pendingTrips.shift();
   filteredTrips.innerHTML = ``
-  pendingTrips.forEach(trip => {
-    let destination = destinationsRepo.findDestination(trip.destinationID);
-    filteredTrips.innerHTML += `<div id="${trip.id}"><h3>${destination.destination}<h3><p>${trip.date}</p></div>`;
-  });
+  pendingTrips.forEach(trip => printMiniTrip(trip));
 };
 
 function findYearCost() {
@@ -198,8 +215,8 @@ function loginCheck() {
     getUser(userID[1]).then(data => {
       currentUser = data;
       totalSpent.innerHTML = `${findYearCost()} dollars spent on trips this year`
-      printHeroTrip('last');
-      printPastTrips();
+      pastTripLayout()
+      nav.classList.remove('hidden')
       toggleLoginForm();
     }).catch(error => {
       console.log(error)
@@ -219,16 +236,22 @@ function submitVacationForm() {
 }
 
 function futureTripLayout() {
+  tripsType.innerText = 'Future Trips'
+  printVacationCountdown('next')
   printHeroTrip('next')
   printFutureTrips()
 }
 
 function pastTripLayout() {
+  tripsType.innerText = 'Past Trips'
+  printVacationCountdown('last')
   printHeroTrip('last')
   printPastTrips()
 }
 
 function pendingTripLayout() {
+  tripsType.innerText = 'Pending Trips'
+  printVacationCountdown('pending')
   printHeroTrip('pending')
   printPendingTrips()
 }
@@ -245,4 +268,22 @@ function toggleLoginForm() {
 
 function reformatDate(date) {
   return date.split('-').join('/')
+}
+
+function printMiniTrip(trip) {
+  let destinationsRepo = new Destinations(destinationsData);
+  let destination = destinationsRepo.findDestination(trip.destinationID);
+  let dayOrDays;
+  let guestOrGuests;
+  if (trip.duration === 1) {
+    dayOrDays = 'day'
+  } else {
+    dayOrDays = 'days'
+  };
+  if (trip.travelers === 1) {
+    guestOrGuests = 'guest'
+  } else {
+    guestOrGuests = 'guests'
+  };
+  filteredTrips.innerHTML += `<div id="trip-${trip.id}"><h3>${destination.destination}<h3><p>${trip.date} | ${trip.duration} ${dayOrDays} | ${trip.travelers} ${guestOrGuests}</p></div>`;
 }
