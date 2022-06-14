@@ -10,12 +10,15 @@
   <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:ital,wght@0,100;0,200;1,100;1,200&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header><h1>TRAVEL TRACKER</h1><h1 class ='total-spent'></h1></header>
+  <header><h1>TRAVEL TRACKER</h1><p class='user-info'></p></header>
   <nav class='hidden'>
-    <button class='future-trips nav'>Future Trips</button>
-    <button class='past-trips nav'>Past Trips</button>
-    <button class='pending-trips nav'>Pending Trips</button>
-    <button class='trip-planner nav'>Plan a New Trip</button>
+    <section class'nav-buttons'>
+      <button class='future-trips nav'>Future Trips</button>
+      <button class='past-trips nav'>Past Trips</button>
+      <button class='pending-trips nav'>Pending Trips</button>
+      <button class='trip-planner nav'>Plan a New Trip</button>
+    </section>
+    <h1 class ='total-spent'></h1>
   </nav>
   <h1 class=trips-type>Past Trips</h1>
   <section class="vital-info">
@@ -37,18 +40,18 @@
   </article>
   <section class='login-form'>
     <form>
-      <label for="userName" id="userNameLabel">UserName:
+      <label for="userName" id="userNameLabel"><p>Username</p>
         <input type="text" name="userName" id="userName" required placeholder="username">
       </label><br>
-      <label for="password" id="passwordLabel">Password:
+      <label for="password" id="passwordLabel"><p>Password</p>
         <input type="password" name="password" id="password" required placeholder="password">
 
         </select>
       </label><br>
       <input type="submit" value="Submit" id="submitLogin">
-      <h2 class='login-error hidden'>Please complete all fields.</h2>
-      <h2 class='password-error hidden'>Password incorrect.</h2>
-      <h2 class='userName-error hidden'>UserName not found.</h2>
+      <h2 class='login-error hidden'>Please complete all fields</h2>
+      <h2 class='password-error hidden'>Password incorrect</h2>
+      <h2 class='userName-error hidden'>UserName not found</h2>
     </form>
   </section>
 
@@ -58,22 +61,22 @@
     <section class='new-trip-form hidden'>
       <button class='cancel-button'>X</button>
       <form>
-        <label for="calendarActive" id="calendarLabel">Enter Date:
+        <label for="calendarData" id="calendarLabel"><p>Enter Start Date</p>
           <input type="date" name="calendarData" id="calendarData">
         </label><br>
-        <label for="numTravelers" id="numTravelersLabel">Number of Travelers:
+        <label for="calendarEndData" id="calendarEndLabel"><p>Enter End Date</p>
+          <input type="date" name="calendarEndData" id="calendarEndData">
+        </label><br>
+        <label for="numTravelers" id="numTravelersLabel"><p>Number of Travelers</p>
           <input type="number" name="numTravelers" id="numTravelers" required placeholder="Enter number of travelers.">
         </label><br>
-        <label for="tripLength" id="tripLengthLabel">Length of trip:
-          <input type="number" name="tripLength" id="tripLength" required placeholder="Enter length of trip.">
-        </label><br>
-        <label for="destination" id="destinationLabel">Where do you want to go?
+        <label for="destination" id="destinationLabel"><p>Where do you want to go?</p>
           <select name="destination" id="destination" required placeholder="Select destination.">
-
           </select>
         </label><br>
         <input type="submit" value="Submit" id="submitVacation">
         <h2 class='error-handling hidden'>Please complete all fields.</h2>
+        <h2 class='date-error-handling hidden'>Please enter valid dates</h2>
       </form>
     </section>
 
