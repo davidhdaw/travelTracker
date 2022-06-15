@@ -44,6 +44,18 @@ nav {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
+nav button {
+ color: #0A0908;
+ font-size: 14pt;
+ font-family: 'League Gothic', sans-serif;
+ text-transform: uppercase;
+ background-color: #D7D9D7;
+ border: none;
+}
+
+nav button:hover {
+  color: #E98A15;
+}
 
 .total-spent {
   font-size: 16pt;
@@ -82,15 +94,6 @@ nav {
   margin-block-start: .25em
 }
 
-.next-trip {
-
-  height: 215px;
-  background-color: white;
-  border: 6px solid #646E68;
-  border-radius: 8px;
-  filter: drop-shadow(2px 2px 3px black);
-}
-
 .hero-trip {
   display: flex;
   flex-direction: column;
@@ -107,30 +110,18 @@ nav {
   text-align: left;
 }
 
-.filter-error {
-  color: #0A0908;
-  width: 100%;
-  text-align: center;
-  margin-top: 70px;
-  font-size: 48px;
-}
-
 .hero-trip img {
   height: 200px;
   width: 300px;
   margin-right: 10px;
 }
 
-.cancel-button {
-  position: absolute;
-  top: 2px;
-  right: 3px;
-  border: 1px solid black;
-  margin-block-start: 0px;
-  margin-block-end: 0px;
-  margin: 0px;
-  padding: 0px;
-
+.filter-error {
+  color: #0A0908;
+  width: 100%;
+  text-align: center;
+  margin-top: 70px;
+  font-size: 48px;
 }
 
 .filtered-trips div {
@@ -157,38 +148,6 @@ nav {
   margin: .15em
 }
 
-.block-background {
-  background-color: black;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100vw;
-  height: 100vh;
-  z-index: 2;
-  opacity: .4;
-}
-
-.new-trip-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 30px 15px;
-  background-color: white;
-  border: 6px solid #646E68;
-  border-radius: 8px;
-  filter: drop-shadow(2px 2px 3px black);
-  z-index: 3;
-  opacity: 1;
-  width: 300px;
-  height: 300px;
-  position: absolute;
-  left:50%;
-  margin-left:-150px;
-  top: 50%;
-  margin-top:-300px;
-}
-
 .block-background-login {
   background-color: #D7D9D7;
   position: absolute;
@@ -207,20 +166,6 @@ nav {
   color: #0A0908;
 }
 
-nav button {
- /* font-family: 'Montserrat', sans-serif; */
- color: #0A0908;
- font-size: 14pt;
- font-family: 'League Gothic', sans-serif;
- text-transform: uppercase;
- background-color: #D7D9D7;
- border: none;
-}
-
-nav button:hover {
-  color: #E98A15;
-}
-
 .login-form {
   display: flex;
   flex-direction: column;
@@ -235,6 +180,49 @@ nav button:hover {
   opacity: 1;
   width: 300px;
   height: 170px;
+  position: absolute;
+  left:50%;
+  margin-left:-150px;
+  top: 50%;
+  margin-top:-300px;
+}
+
+.block-background {
+  background-color: black;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  opacity: .4;
+}
+
+.cancel-button {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  border: 1px solid black;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.new-trip-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 30px 15px;
+  background-color: white;
+  border: 6px solid #646E68;
+  border-radius: 8px;
+  filter: drop-shadow(2px 2px 3px black);
+  z-index: 3;
+  opacity: 1;
+  width: 300px;
+  height: 300px;
   position: absolute;
   left:50%;
   margin-left:-150px;
