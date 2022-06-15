@@ -33,6 +33,7 @@ let destinationSelector = document.querySelector('#destination')
 let calendarData = document.querySelector('#calendarData')
 let calendarEndData = document.querySelector('#calendarEndData')
 let numTravelers = document.querySelector('#numTravelers')
+let estimatedCost = document.querySelector('.estimated-cost')
 let userInfo = document.querySelector('.user-info')
 let errorMessage = document.querySelector('.error-handling')
 let dateErrorMessage = document.querySelector('.date-error-handling')
@@ -57,6 +58,7 @@ window.addEventListener('load', loadData)
 futureTripBtn.addEventListener('click', futureTripLayout)
 pastTripBtn.addEventListener('click', pastTripLayout)
 pendingTripBtn.addEventListener('click', pendingTripLayout)
+tripForm.addEventListener('input', printTripCost)
 cancelBtn.addEventListener('click', toggleVacationForm)
 cancelBtn.addEventListener('keydown', shiftTabFocus)
 planTripBtn.addEventListener('click', toggleVacationForm)
@@ -130,6 +132,16 @@ function reloadToPending() {
 }
 
 //DOM functions
+function printTripCost() {
+  let tripsRepo = new Trips(tripsData)
+  let destinationsRepo = new Destinations(destinationsData)
+  let tripDuration = dayjs(calendarEndData.value).diff(dayjs(calendarData.value), 'days')
+  if (tripDuration >= 0 && parseInt(numTravelers.value) >= 0 && parseInt(destinationSelector.value) !== '') {
+    let costForTrip = Math.floor(destinationsRepo.findTripCost(parseInt(destinationSelector.value), parseInt(numTravelers.value), tripDuration) * 1.1)
+    estimatedCost.innerText = `Estimated Cost: ${costForTrip}`
+  }
+}
+
 function printVacationCountdown(type) {
   let tripsRepo = new Trips(tripsData)
   let destinationsRepo = new Destinations(destinationsData)
